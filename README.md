@@ -11,7 +11,7 @@
 
 ### 准备主题和SSL证书
 
-准备工作的细节请参考[BCE官网帮助文档](https://bce.baidu.com/doc/Kafka/QuickGuide.html)
+准备工作的细节请参考[BCE官网帮助文档](https://cloud.baidu.com/doc/Kafka/QuickGuide.html)
 
 1. 在管理控制台中创建好主题。
 2. 在管理控制台中下载您的jks证书文件和Kafka客户端配置文件。
