@@ -31,6 +31,6 @@ IDE环境执行的话，需要设置命令行参数`your_topic_name`。
 
 ## 参考链接
 
-- [百度Kafka产品介绍](https://bce.baidu.com/product/kafka.html)
+- [百度Kafka产品介绍](https://cloud.baidu.com/product/kafka.html)
 - [Kafka](http://kafka.apache.org/)
 
