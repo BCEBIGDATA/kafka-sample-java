@@ -30,15 +30,19 @@ import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Properties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class Consumer {
+
+    private static final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
     private static final int TIME_OUT_MS = 5000;
 
     static void run(String topic, int numOfRecords) throws IOException {
         Properties properties = new Properties();
         properties.load(Consumer.class.getClassLoader().getResourceAsStream("client.properties"));
-        properties.setProperty(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, "kafka.bj.baidubce.com:9092");
+        properties.setProperty(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, "kafka.bj.baidubce.com:9091");
         properties.setProperty(CommonClientConfigs.CLIENT_ID_CONFIG, "kafka-samples-java-consumer");
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "kafka-samples-java-group");
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class.getName());
@@ -53,7 +57,7 @@ class Consumer {
                 String position = record.partition() + "-" + record.offset();
                 String key = new String(record.key(), "UTF-8");
                 String value = new String(record.value(), "UTF-8");
-                System.out.println(position + ": " + key + " " + value);
+                logger.info(position + ": " + key + " " + value);
             }
             numOfRecords -= records.count();
         }
