@@ -14,7 +14,7 @@
 准备工作的细节请参考[BCE官网帮助文档](https://cloud.baidu.com/doc/Kafka/QuickGuide.html)
 
 1. 在管理控制台中创建好主题。
-2. 在管理控制台中下载您的jks证书文件和Kafka客户端配置文件。
+2. 在管理控制台中下载您的kafka-key.zip，包含Java程序使用的jks证书文件和Kafka客户端配置文件。对C++、Python等Kafka客户端，请使用pem证书文件。
 3. 用上一步的文件替换样例代码中的`client.keystore.jks`、`client.truststore.jks`以及`src/main/resources/client.properties`。
 
 ### 运行样例代码

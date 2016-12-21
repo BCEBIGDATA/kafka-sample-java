@@ -25,18 +25,13 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.serialization.ByteArrayDeserializer;
+import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Properties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 class Consumer {
-
-    private static final Logger logger = LoggerFactory.getLogger(Consumer.class);
-
     private static final int TIME_OUT_MS = 5000;
 
     static void run(String topic, int numOfRecords) throws IOException {
@@ -45,23 +40,25 @@ class Consumer {
         properties.setProperty(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, "kafka.bj.baidubce.com:9091");
         properties.setProperty(CommonClientConfigs.CLIENT_ID_CONFIG, "kafka-samples-java-consumer");
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "kafka-samples-java-group");
-        properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class.getName());
-        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class.getName());
+        properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
-        KafkaConsumer<byte[], byte[]> consumer = new KafkaConsumer<byte[], byte[]>(properties);
-        consumer.subscribe(Collections.singletonList(topic));
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(properties);
 
-        while (numOfRecords > 0) {
-            ConsumerRecords<byte[], byte[]> records = consumer.poll(TIME_OUT_MS);
-            for (ConsumerRecord<byte[], byte[]> record : records) {
-                String position = record.partition() + "-" + record.offset();
-                String key = new String(record.key(), "UTF-8");
-                String value = new String(record.value(), "UTF-8");
-                logger.info(position + ": " + key + " " + value);
+        try {
+            consumer.subscribe(Collections.singletonList(topic));
+
+            while (numOfRecords > 0) {
+                ConsumerRecords<String, String> records = consumer.poll(TIME_OUT_MS);
+                for (ConsumerRecord<String, String> record : records) {
+                    String position = record.partition() + "-" + record.offset();
+                    System.out.println(position + ": " + record.key() + " " + record.value());
+                }
+                numOfRecords -= records.count();
             }
-            numOfRecords -= records.count();
+        } finally {
+            consumer.close();
         }
-
-        consumer.close();
     }
 }
