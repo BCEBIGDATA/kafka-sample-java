@@ -24,7 +24,7 @@ import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.serialization.ByteArraySerializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -36,18 +36,20 @@ class Producer {
         properties.load(Consumer.class.getClassLoader().getResourceAsStream("client.properties"));
         properties.setProperty(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, "kafka.bj.baidubce.com:9091");
         properties.setProperty(CommonClientConfigs.CLIENT_ID_CONFIG, "kafka-samples-java-producer");
-        properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, ByteArraySerializer.class.getName());
-        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ByteArraySerializer.class.getName());
+        properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        properties.setProperty(ProducerConfig.ACKS_CONFIG, "1");
 
-        KafkaProducer<byte[], byte[]> producer = new KafkaProducer<byte[], byte[]>(properties);
-
-        for (int i = 0; i < numOfRecords; i++) {
-            byte[] key = Integer.toString(i).getBytes("UTF-8");
-            byte[] value = "hello, kafka".getBytes("UTF-8");
-            ProducerRecord<byte[], byte[]> record = new ProducerRecord<byte[], byte[]>(topic, key, value);
-            producer.send(record);
+        KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties);
+        try {
+            for (int i = 0; i < numOfRecords; i++) {
+                String key = String.valueOf(i);
+                String value = "hello, kafka";
+                ProducerRecord<String, String> record = new ProducerRecord<String, String>(topic, key, value);
+                producer.send(record);
+            }
+        } finally {
+            producer.close();
         }
-
-        producer.close();
     }
 }

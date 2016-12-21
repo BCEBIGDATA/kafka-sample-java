@@ -34,9 +34,8 @@ public class Application {
             System.out.println("");
             System.out.println("Usage: run.bat/run.sh topic_name, where topic_name looks like 'prefix__topic'");
             System.out.println("Please follow guide on https://cloud.baidu.com/product/kafka.html to: ");
-            System.out.println("  1. Create/Get client.keystore.jks, client.truststore.jks files.");
-            System.out.println("  2. Create/Get client.properties file.");
-            System.out.println("  3. Create/Get topic_name.");
+            System.out.println("  1. Create/Get topic_name.");
+            System.out.println("  2. Create/Get kafka-key.zip from console.");
             return;
         }
 
@@ -44,6 +43,18 @@ public class Application {
             System.out.println("Please replace *.jks with your own.");
             return;
         }
+
+        // If log shows
+        // java.io.IOException: Keystore was tampered with, or password was incorrect: Password verification failed
+        // Please make sure your client.properties matches client.keystore.jks and client.truststore.jks
+
+        // If log shows
+        // java.io.FileNotFoundException: client.truststore.jks
+        // Please make sure client.keystore.jks and client.truststore.jks are placed along with run.bat/run.sh
+
+        // If log shows
+        // javax.net.ssl.SSLException
+        // Please make sure the key files are downloaded from console.
 
         Properties properties = new Properties();
         properties.load(Application.class.getClassLoader().getResourceAsStream("client.properties"));
