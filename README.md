@@ -8,6 +8,7 @@
 
 - [Oracle JDK 7 or JDK 8](http://www.oracle.com/technetwork/java/)，最低为Java 1.7.0-b147。
 - 最新的稳定版[Apache Maven](http://maven.apache.org/)
+- [Kafka 0.10.1.x客户端](http://kafka.apache.org/)
 
 ### 准备主题和SSL证书
 
