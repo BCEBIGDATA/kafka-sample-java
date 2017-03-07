@@ -35,11 +35,13 @@ class Consumer {
     private static final int TIME_OUT_MS = 5000;
 
     static void run(String topic, int numOfRecords) throws IOException {
+        String accountId = topic.split("__")[0];
+
         Properties properties = new Properties();
         properties.load(Consumer.class.getClassLoader().getResourceAsStream("client.properties"));
         properties.setProperty(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, "kafka.bj.baidubce.com:9091");
-        properties.setProperty(CommonClientConfigs.CLIENT_ID_CONFIG, "kafka-samples-java-consumer");
-        properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "kafka-samples-java-group");
+        properties.setProperty(CommonClientConfigs.CLIENT_ID_CONFIG, accountId + "kafka-samples-java-consumer");
+        properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, accountId + "kafka-samples-java-group");
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");

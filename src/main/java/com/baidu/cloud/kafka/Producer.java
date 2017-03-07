@@ -32,10 +32,12 @@ import java.util.Properties;
 class Producer {
 
     static void run(String topic, int numOfRecords) throws IOException {
+        String accountId = topic.split("__")[0];
+
         Properties properties = new Properties();
         properties.load(Consumer.class.getClassLoader().getResourceAsStream("client.properties"));
         properties.setProperty(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, "kafka.bj.baidubce.com:9091");
-        properties.setProperty(CommonClientConfigs.CLIENT_ID_CONFIG, "kafka-samples-java-producer");
+        properties.setProperty(CommonClientConfigs.CLIENT_ID_CONFIG, accountId + "kafka-samples-java-producer");
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.setProperty(ProducerConfig.ACKS_CONFIG, "1");
@@ -44,7 +46,7 @@ class Producer {
         try {
             for (int i = 0; i < numOfRecords; i++) {
                 String key = String.valueOf(i);
-                String value = "hello, kafka";
+                String value = i + "-hello kafka";
                 ProducerRecord<String, String> record = new ProducerRecord<String, String>(topic, key, value);
                 producer.send(record);
             }
